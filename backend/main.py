@@ -10,6 +10,7 @@ from pydantic import BaseModel
 from supabase import create_client, Client
 from typing import List, Optional
 from sqlmodel import Field, Session, SQLModel, create_engine, select
+import pandas as pd
 
 load_dotenv()
 
@@ -61,6 +62,21 @@ class benchmark_results(SQLModel, table=True):
     upper_bound: float
     lower_bound: float
 
+
+class benchmark_data(SQLModel, table=True):
+    id: int = Field(default=None, primary_key=True)
+    run_id: str
+    sample_id: str
+    epoch: int
+    input: str
+    target: str
+    output: str
+    score: str
+    score_binary: int
+    cumulative_score: int
+    cumulative_score_percentage: float
+
+
 SQLModel.metadata.create_all(engine)
 
 
@@ -85,3 +101,62 @@ async def overall_eval(model1: str, model2: str):
             }
             for row in results
         ]
+    
+@app.get("/dataset-eval")
+async def dataset_eval(model1: str, model2: str):
+    with Session(engine) as session:
+        run_ids = session.exec(select(benchmark_results.run_id).where(benchmark_results.model.in_([model1, model2]))).all()
+        results1 = session.exec(
+            select(
+                benchmark_data.sample_id,
+                benchmark_data.input,
+                benchmark_data.target,
+                benchmark_data.output,
+                benchmark_data.score
+            ).where(benchmark_data.run_id == run_ids[0])
+        )
+        results2 = session.exec(
+            select(
+                benchmark_data.sample_id,
+                benchmark_data.input,
+                benchmark_data.target,
+                benchmark_data.output,
+                benchmark_data.score
+            ).where(benchmark_data.run_id == run_ids[1])
+        )
+
+        # Convert results to pandas DataFrames
+        df1 = pd.DataFrame([{
+            "score": row.score,
+            "sample_id": row.sample_id,
+            "input": row.input,
+            "target": row.target,
+            "output": row.output
+        } for row in results1])
+
+        df2 = pd.DataFrame([{
+            "score": row.score,
+            "sample_id": row.sample_id,
+            "input": row.input,
+            "target": row.target,
+            "output": row.output
+        } for row in results2])
+
+        merged_df = pd.merge(df1, df2, on="sample_id", suffixes=("_model1", "_model2"))
+
+        return_df = merged_df[["sample_id", 
+                               "input_model1",
+                                 "target_model1",
+                                 "output_model1",
+                                 "output_model2",
+                                 "score_model1",
+                                 "score_model2"]].rename(columns={"input_model1": "input",
+                                                                   "target_model1": "target",
+                                                                   "output_model1": "output_model1",
+                                                                   "output_model2": "output_model2",
+                                                                   "score_model1": "score_model1",
+                                                                   "score_model2": "score_model2"})
+
+        return return_df.to_dict(orient="records")
+
+       
