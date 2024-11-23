@@ -11,6 +11,7 @@ import {
   } from "@/components/ui/dialog"
 import { ModelCard } from "./model-card";
 import { InputFile } from "./input-file";
+import { Button } from "../ui/button";
 
 
 export const AddCardDialog: React.FC = () => {
@@ -30,9 +31,12 @@ export const AddCardDialog: React.FC = () => {
             <DialogContent>
                 <DialogHeader>
                 <DialogTitle>Add your dataset</DialogTitle>
-                <DialogDescription>
-                    Your dataset must follow this schema. Accepted file types are CSV and JSON.
-                    <InputFile />
+                <DialogDescription className="flex flex-col gap-4">
+                    <div>
+                        Your dataset must follow this schema. Accepted file types are CSV and JSON.
+                        <InputFile />
+                    </div>
+                    <Button type="submit">Submit</Button>
                 </DialogDescription>
                 </DialogHeader>
             </DialogContent>

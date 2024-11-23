@@ -30,12 +30,14 @@ const FormSchema = z.object({
 
 interface IProps {
     items: SelectModel[],
+    submit: boolean,
 }
 
 export const CheckboxReactHookFormMultiple: React.FC<IProps> = (props) => {
 
     const {
         items,
+        submit,
     } = props;
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -106,7 +108,9 @@ export const CheckboxReactHookFormMultiple: React.FC<IProps> = (props) => {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        { submit &&
+            <Button type="submit">Submit</Button>
+        }
       </form>
     </Form>
   )

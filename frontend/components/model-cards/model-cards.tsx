@@ -30,8 +30,11 @@ export const ModelCards: React.FC = () => {
             </div>
             <div>
             { isBrowseCardOpen &&
-                <>
+                <div className="flex flex-row">
                     <ModelSelectCard
+                        submit={ true }
+                        align="start"
+                        customClasses={ "rounded-tr-none rounded-br-none border-r-0" }
                         title={"Select Models"}
                         content={
                         [
@@ -58,7 +61,22 @@ export const ModelCards: React.FC = () => {
                         ]
                         }
                     />
-                </>
+                    <ModelSelectCard
+                        submit= { false }
+                        align="end"
+                        customClasses={ "rounded-tl-none rounded-bl-none border-l-0 "}
+                        title={"My Datasets"}
+                        content={
+                        [
+                            {
+                            id: "theory_of_mind",
+                            label: "Theory of Mind",
+                            },
+
+                        ]
+                        }
+                    />
+                </div>
             }
             </div>
             </div>

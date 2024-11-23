@@ -14,6 +14,9 @@ interface IProps {
     description?: string,
     content?: SelectModel[],
     footer?: string,
+    customClasses: string,
+    align: "start" | "end",
+    submit: boolean,
 }
 
 export const ModelSelectCard: React.FC<IProps> = (props) => {
@@ -21,14 +24,17 @@ export const ModelSelectCard: React.FC<IProps> = (props) => {
         title,
         description,
         content,
-        footer
+        footer,
+        customClasses,
+        align,
+        submit,
     } = props;
 
   return (
     <>
-        <Card className="w-[950px] h-[320px]">
+        <Card className={`w-[470px] h-[320px] ${customClasses}`}>
             <CardHeader>
-                <CardTitle>{ title }</CardTitle>
+                <CardTitle className={`flex flex-${align}`}>{ title }</CardTitle>
                 <CardDescription>{ description }</CardDescription>
             </CardHeader>
             <CardContent className="flex justify-start items-center">
@@ -36,6 +42,7 @@ export const ModelSelectCard: React.FC<IProps> = (props) => {
                 { content !== undefined &&
                     <CheckboxReactHookFormMultiple
                         items={ content }
+                        submit={ submit }
                     />
                 }
             </CardContent>

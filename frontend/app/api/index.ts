@@ -12,3 +12,6 @@ export const defaultQueryFn = async (url: string, method: string) => {
 
     return body;
 };
+
+// POST REQUEST TO UPLOAD DATASET
+export const uploadDataset =

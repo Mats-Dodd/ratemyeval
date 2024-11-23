@@ -6,9 +6,9 @@ import React from "react";
 
 export function InputFile() {
   return (
-    <span className="grid w-full max-w-sm items-center gap-4">
-      <Label htmlFor="picture"></Label>
-      <Input id="picture" type="file" />
+    <span className="grid w-[100%] max-w-sm items-center gap-4">
+      <Label htmlFor="file"></Label>
+      <Input id="file" type="file" />
     </span>
   )
 }

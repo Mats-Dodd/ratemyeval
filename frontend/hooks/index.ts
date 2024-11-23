@@ -16,4 +16,3 @@ export const useRoot = () => {
         queryFn: async () => defaultQueryFn("", "GET"),
     });
 };
-
