@@ -13,7 +13,7 @@ export const useReadBenchMark = (test_id: string) => {
 export const useRoot = () => {
     return useQuery({
         queryKey: [ 'root' ],
-        queryFn: async () => defaultQueryFn("/", "GET"),
+        queryFn: async () => defaultQueryFn("", "GET"),
     });
 };
 
