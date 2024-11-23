@@ -1,3 +1,4 @@
+import csv
 import json
 import os
 from dotenv import load_dotenv
@@ -7,11 +8,10 @@ from fastapi import FastAPI, Form, HTTPException, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from supabase import create_client, Client
-from typing import Optional
+from typing import List, Optional
 
 load_dotenv()
 
-# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -29,15 +29,37 @@ SUPABASE_URL = os.getenv("NEXT_PUBLIC_SUPABASE_URL")
 SUPABASE_API_KEY = os.getenv("SUPABASE_API_KEY")
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_API_KEY)
 
+# Benchmark model
+class BenchmarkRequest(BaseModel):
+    model_name: str
+    dataset_id: str
+
+# Upload dataset
+def csv_to_json(file_content: bytes) -> List[dict]:
+    content_str = file_content.decode("utf-8")
+    csv_reader = csv.DictReader(content_str.splitlines())
+    
+    # Convert rows to JSON format
+    result = [{"input": row["input"], "target": row["target"]} for row in csv_reader]
+    return result
+
 @app.post("/upload-dataset", status_code=201)
 async def upload_dataset(name: Optional[str] = Form(None), file: UploadFile = File(...)):
     logger.info("Uploading dataset")
 
-    if file.content_type != "application/json":
-        raise HTTPException(status_code=400, detail="Uploaded file must be a JSON file")
+    # Check if the uploaded file is valid
+    if file.content_type not in ["application/json", "text/csv"]:
+        raise HTTPException(status_code=400, detail="Uploaded file must be a JSON or CSV file")
     
     content = await file.read()
-    dataset = json.loads(content)
+
+    # Determine file format and convert content accordingly
+    if file.content_type == "application/json":
+        dataset = json.loads(content)
+    elif file.content_type == "text/csv":
+        dataset = csv_to_json(content)
+    else:
+        raise HTTPException(status_code=400, detail="Unsupported file type")
 
     dataset_entry = {
         "name": name if name else file.filename,
@@ -69,28 +91,31 @@ async def upload_dataset(name: Optional[str] = Form(None), file: UploadFile = Fi
     }
     """
 
-
 @app.post("/benchmark", status_code=201)
-async def benchmark():
-    logger.info("Running benchmark test")
+async def benchmark(request: BenchmarkRequest):
+    model_name = request.model_name
+    dataset_id = request.dataset_id
+    dataset_response = supabase.table("datasets").select("*").eq("id", dataset_id).execute()
+    logger.info(f"Running benchmark test for model: {model_name}, dataset_id: {dataset_id}")
+    print(dataset_response.data)
 
     # ===================
-    #  Run the benchmark
+    #  Run the benchmark with model_name and dataset_id
     # ===================
-    with open("run_data.json", "r") as file:
+
+    with open("benchmark_results.json", "r") as file:
         benchmark_results = json.load(file)
     
-    with open("run_data_samples.json", "r") as file:
+    with open("benchmark_data.json", "r") as file:
         benchmark_data = json.load(file)
 
     # Insert data into benchmark_results table
-    supabase.table("benchmark_results").insert(benchmark_results[0]).execute()
-    logger.info("Inserted benchmark results into benchmark_results table")
+    for i, run in enumerate(benchmark_results):
+        supabase.table("benchmark_results").insert(run).execute()
     
     # Insert data into benchmark_data table
     for i, run in enumerate(benchmark_data):
         supabase.table("benchmark_data").insert(run).execute()
-        logger.info(f"Inserted benchmark data for run {i+1} into benchmark_data table")
     
     return {
         "message": "Benchmark test completed",
@@ -103,6 +128,7 @@ async def benchmark():
     }
     """
 
+# Get benchmark results
 @app.get("/benchmark/{run_id}", status_code=200)
 async def read_benchmark(run_id: str):
     logger.info(f"Getting benchmark results for {run_id}")
