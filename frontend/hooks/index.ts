@@ -16,3 +16,10 @@ export const useRoot = () => {
         queryFn: async () => defaultQueryFn("", "GET"),
     });
 };
+
+export const useDataSetEVal = (model1: string, model2: string) => {
+    return useQuery({
+        queryKey: [ 'dataset-eval' ],
+        queryFn: async () => defaultQueryFn(`dataset-eval?model1=${model1}&model2=${model2}`, "GET"),
+    });
+};

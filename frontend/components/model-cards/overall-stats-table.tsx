@@ -11,7 +11,21 @@ import {
   } from "@/components/ui/table"
 import React from "react";
 
-  export const OverallStatsTable: React.FC = () => {
+type OverallScore = {
+    accuracy: number;
+    model: string;
+    stderr: number;
+}
+
+  interface IProps {
+    overallEvals: OverallScore[] | undefined,
+  }
+
+  export const OverallStatsTable: React.FC<IProps> = (props) => {
+
+    const {
+        overallEvals,
+    } = props;
 
     return (
 
@@ -25,11 +39,13 @@ import React from "react";
             </TableRow>
         </TableHeader>
         <TableBody>
-            <TableRow>
-            <TableCell className="font-medium">GPT 4 Test</TableCell>
-            <TableCell>82%</TableCell>
-            <TableCell className="text-right">5</TableCell>
-            </TableRow>
+            { overallEvals?.map((evals: OverallScore) => (
+                <TableRow key={ evals.model }>
+                    <TableCell className="font-medium">{ evals.model }</TableCell>
+                    <TableCell>{ evals.accuracy }</TableCell>
+                    <TableCell className="text-right">{ evals.stderr }</TableCell>
+                </TableRow>
+            ))}
         </TableBody>
     </Table>
     );

@@ -8,43 +8,39 @@ import {
     AccordionTrigger,
   } from "@/components/ui/accordion"
 import { QuestionTable } from "./question-table";
+import { useDataSetEVal } from "@/hooks";
 
-export const QuestionsAccordions: React.FC = () => {
+interface IProps {
+    selectedModels: string[];
+}
+
+export const QuestionsAccordions: React.FC<IProps> = (props) => {
+
+    const {
+        selectedModels,
+    } = props;
+
+    console.log("Selected models",selectedModels);
+    const { data: questions, isLoading: loadingQuestions } = useDataSetEVal(selectedModels[0], selectedModels[1]);
+    console.log("questions:",questions);
+
+    if (loadingQuestions) {
+        return (<>Loading...</>);
+    }
 
     return (
         <>
-        <Accordion type="single" collapsible>
-            <AccordionItem value="item-1">
-                <AccordionTrigger>Question 1?</AccordionTrigger>
+        Questions
+        { questions.map((question, index: number) => (
+            <Accordion key={ index } type="single" collapsible>
+            <AccordionItem value={ question.input }>
+                <AccordionTrigger>{ question.input }</AccordionTrigger>
                 <AccordionContent>
                     <QuestionTable />
                 </AccordionContent>
             </AccordionItem>
         </Accordion>
-                <Accordion type="single" collapsible>
-                <AccordionItem value="item-1">
-                    <AccordionTrigger>Question 2?</AccordionTrigger>
-                    <AccordionContent>
-                        <QuestionTable />
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
-        <Accordion type="single" collapsible>
-        <AccordionItem value="item-1">
-            <AccordionTrigger>Question 3?</AccordionTrigger>
-            <AccordionContent>
-                <QuestionTable />
-            </AccordionContent>
-        </AccordionItem>
-    </Accordion>
-        <Accordion type="single" collapsible>
-        <AccordionItem value="item-1">
-            <AccordionTrigger>Question 4?</AccordionTrigger>
-            <AccordionContent>
-                <QuestionTable />
-            </AccordionContent>
-        </AccordionItem>
-    </Accordion>
+        ))}
     </>
     );
 };
