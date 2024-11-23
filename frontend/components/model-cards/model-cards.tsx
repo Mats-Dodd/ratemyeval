@@ -104,16 +104,18 @@ export const ModelCards: React.FC = () => {
             </div>
             { overallEvals &&
                 <>
-                    <Card className="w-[100%] h-[100%]">
+                    <Card className="w-[950px] h-[100%]">
                         <OverallStatsTable overallEvals={ overallEvals } />
                     </Card>
-                    <Card className="w-[100%] h-[100%] p-4">
+                    <Card className="w-[950px] h-[100%] p-4">
                         { selectedModels !== undefined &&
                         <QuestionsAccordions selectedModels={ selectedModels } />
                         }
                     </Card>
                     <Card className="w-[100%] h-[100%] p-4">
-                        <CompareTable />
+                        { selectedModels !== undefined &&
+                            <CompareTable selectedModels={ selectedModels } />
+                        }
                     </Card>
                 </>
             }

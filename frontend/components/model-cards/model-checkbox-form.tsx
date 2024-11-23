@@ -58,12 +58,10 @@ export const CheckboxReactHookFormMultiple: React.FC<IProps> = (props) => {
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("submmitted with this data",data);
     const overallEval = await getOverallEval(data.items[1],data.items[2]);
     if (handleOverallEvals) {
         handleOverallEvals(overallEval);
     }
-    console.log("overall Eval:",overallEval);
     toast({
       title: "You submitted the following values:",
       description: (

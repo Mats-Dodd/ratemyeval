@@ -20,9 +20,7 @@ export const QuestionsAccordions: React.FC<IProps> = (props) => {
         selectedModels,
     } = props;
 
-    console.log("Selected models",selectedModels);
     const { data: questions, isLoading: loadingQuestions } = useDataSetEVal(selectedModels[0], selectedModels[1]);
-    console.log("questions:",questions);
 
     if (loadingQuestions) {
         return (<>Loading...</>);
@@ -36,7 +34,7 @@ export const QuestionsAccordions: React.FC<IProps> = (props) => {
             <AccordionItem value={ question.input }>
                 <AccordionTrigger>{ question.input }</AccordionTrigger>
                 <AccordionContent>
-                    <QuestionTable />
+                    <QuestionTable question={ question } />
                 </AccordionContent>
             </AccordionItem>
         </Accordion>

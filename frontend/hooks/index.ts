@@ -23,3 +23,17 @@ export const useDataSetEVal = (model1: string, model2: string) => {
         queryFn: async () => defaultQueryFn(`dataset-eval?model1=${model1}&model2=${model2}`, "GET"),
     });
 };
+
+export const useCompareNaive = (model1: string, model2: string) => {
+    return useQuery({
+        queryKey: [ 'compare-naive' ],
+        queryFn: async () => defaultQueryFn(`compare-naive?model1=${model1}&model2=${model2}`, "GET"),
+    });
+};
+
+export const useCompareSmart = (model1: string, model2: string) => {
+    return useQuery({
+        queryKey: [ 'compare-smart' ],
+        queryFn: async () => defaultQueryFn(`compare-smart?model1=${model1}&model2=${model2}`, "GET"),
+    });
+};
