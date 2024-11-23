@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
+import React from "react";
 
 export function EnvVarWarning() {
   return (

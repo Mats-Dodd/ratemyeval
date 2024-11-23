@@ -2,6 +2,7 @@ export type Message =
   | { success: string }
   | { error: string }
   | { message: string };
+import React from "react";
 
 export function FormMessage({ message }: { message: Message }) {
   return (
