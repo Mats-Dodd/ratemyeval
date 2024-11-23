@@ -3,7 +3,6 @@
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
@@ -16,7 +15,6 @@ import React from "react";
     return (
 
     <Table>
-        <TableCaption>Overall Scores</TableCaption>
         <TableHeader>
             <TableRow>
             <TableHead>Input</TableHead>
