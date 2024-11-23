@@ -6,6 +6,7 @@ import { ModelSelectCard } from "./model-select-card";
 import { AddCardDialog } from "./add-card-dialog";
 import { OverallStatsTable } from "./overall-stats-table";
 import { Card } from "../ui/card";
+import { QuestionsAccordions } from "./questions-accordions";
 
 export const ModelCards: React.FC = () => {
 
@@ -83,6 +84,9 @@ export const ModelCards: React.FC = () => {
             </div>
             <Card className="w-[100%] h-[100%]">
                 <OverallStatsTable />
+            </Card>
+            <Card className="w-[100%] h-[100%] p-4">
+                <QuestionsAccordions />
             </Card>
             </div>
         </>
