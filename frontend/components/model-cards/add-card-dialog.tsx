@@ -32,10 +32,10 @@ export const AddCardDialog: React.FC = () => {
                 <DialogHeader>
                 <DialogTitle>Add your dataset</DialogTitle>
                 <DialogDescription className="flex flex-col gap-4">
-                    <div>
+                    <span>
                         Your dataset must follow this schema. Accepted file types are CSV and JSON.
                         <InputFile />
-                    </div>
+                    </span>
                     <Button type="submit">Submit</Button>
                 </DialogDescription>
                 </DialogHeader>

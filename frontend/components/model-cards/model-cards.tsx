@@ -4,6 +4,8 @@ import React, { useReducer } from "react";
 import { ModelCard } from "./model-card";
 import { ModelSelectCard } from "./model-select-card";
 import { AddCardDialog } from "./add-card-dialog";
+import { OverallStatsTable } from "./overall-stats-table";
+import { Card } from "../ui/card";
 
 export const ModelCards: React.FC = () => {
 
@@ -79,6 +81,9 @@ export const ModelCards: React.FC = () => {
                 </div>
             }
             </div>
+            <Card className="w-[100%] h-[100%]">
+                <OverallStatsTable />
+            </Card>
             </div>
         </>
   );

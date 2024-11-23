@@ -43,11 +43,12 @@ export const CheckboxReactHookFormMultiple: React.FC<IProps> = (props) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      items: ["recents", "home"],
+      items: ["theory_of_mind"],
     },
   })
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    console.log("submmitted with this data",data);
     toast({
       title: "You submitted the following values:",
       description: (
