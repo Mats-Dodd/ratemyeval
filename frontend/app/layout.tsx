@@ -39,7 +39,6 @@ export default function RootLayout({
                                 <Link href={"/"}>Ratemyeval</Link>
                             </div>
                             <div className="flex justify-center items-center">
-                                Why guess when you can know ?
                             </div>
                             <div>
                                 <ThemeSwitcher />
