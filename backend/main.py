@@ -66,8 +66,22 @@ SQLModel.metadata.create_all(engine)
 
 
 @app.get("/overall-eval")
-async def overall_eval(model1: str,
-                        model2: str):
+async def overall_eval(model1: str, model2: str):
     with Session(engine) as session:
-        results = session.exec(select(benchmark_results).where(benchmark_results.model.in_([model1, model2])))
-        return results.all()
+        # Execute query and convert results to dictionaries
+        results = session.exec(
+            select(
+                benchmark_results.model, 
+                benchmark_results.accuracy, 
+                benchmark_results.stderr
+            ).where(benchmark_results.model.in_([model1, model2]))
+        )
+        # Convert results to a list of dictionaries
+        return [
+            {
+                "model": row.model,
+                "accuracy": row.accuracy,
+                "stderr": row.stderr
+            }
+            for row in results
+        ]
