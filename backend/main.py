@@ -337,9 +337,11 @@ async def benchmark(request: BenchmarkRequest):
     logger.info(f"Running benchmark test for model: {model_name}, dataset_id: {dataset_id}")
     print(dataset_response.data)
 
-    # ===================
+    # ====================================================
     #  Run the benchmark with model_name and dataset_id
-    # ===================
+    #  (Ran separately due to time constraints)
+    #  To view the benchmark code, see experiments directory
+    # ====================================================
 
     with open("benchmark_results.json", "r") as file:
         benchmark_results = json.load(file)
