@@ -17,6 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import { getOverallEval } from "@/app/api";
 
 type SelectModel= {
     id: string,
@@ -47,8 +48,10 @@ export const CheckboxReactHookFormMultiple: React.FC<IProps> = (props) => {
     },
   })
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log("submmitted with this data",data);
+    const overallEval = await getOverallEval(data.items[1],data.items[2]);
+    console.log("overall Eval:",overallEval);
     toast({
       title: "You submitted the following values:",
       description: (

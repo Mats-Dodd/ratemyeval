@@ -7,6 +7,7 @@ import { AddCardDialog } from "./add-card-dialog";
 import { OverallStatsTable } from "./overall-stats-table";
 import { Card } from "../ui/card";
 import { QuestionsAccordions } from "./questions-accordions";
+import { CompareTable } from "./compare-table";
 
 export const ModelCards: React.FC = () => {
 
@@ -42,19 +43,19 @@ export const ModelCards: React.FC = () => {
                         content={
                         [
                             {
-                            id: "gpt_4",
+                            id: "openai/gpt-4",
                             label: "GPT 4",
                             },
                             {
-                            id: "claude_3_sonnet",
+                            id: "anthropic/claude-3-5-sonnet-latest",
                             label: "Claude 3 Sonnet",
                             },
                             {
-                            id: "gemini_1_5_flash",
+                            id: "google/gemini-1.5-flash-001",
                             label: "Gemini 1 5 Flash",
                             },
                             {
-                            id: "grok_beta",
+                            id: "grok/grok-vision-beta",
                             label: "Grok Beta",
                             },
                             {
@@ -87,6 +88,9 @@ export const ModelCards: React.FC = () => {
             </Card>
             <Card className="w-[100%] h-[100%] p-4">
                 <QuestionsAccordions />
+            </Card>
+            <Card className="w-[100%] h-[100%] p-4">
+                <CompareTable />
             </Card>
             </div>
         </>
