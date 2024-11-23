@@ -154,7 +154,7 @@ async def dataset_eval(model1: str, model2: str):
                                                                    "score_model1": "score_model1",
                                                                    "score_model2": "score_model2"})
 
-        return return_df.to_dict(orient="records")
+        return return_df.head(10).to_dict(orient="records")
 
 @app.get("/compare-naive")
 async def compare_naive(model1: str, model2: str):
