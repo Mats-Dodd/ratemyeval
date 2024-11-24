@@ -23,6 +23,13 @@ type SelectModel= {
     id: string,
     label: string,
 }
+
+type OverallScore = {
+    accuracy: number;
+    model: string;
+    stderr: number;
+}
+
 const FormSchema = z.object({
   items: z.array(z.string()).refine((value) => value.some((item) => item), {
     message: "You have to select at least one item.",
@@ -32,6 +39,7 @@ const FormSchema = z.object({
 interface IProps {
     items: SelectModel[],
     submit: boolean,
+    handleOverallEvals?: (overallEvals: OverallScore[]) => void
 }
 
 export const CheckboxReactHookFormMultiple: React.FC<IProps> = (props) => {
@@ -39,6 +47,7 @@ export const CheckboxReactHookFormMultiple: React.FC<IProps> = (props) => {
     const {
         items,
         submit,
+        handleOverallEvals,
     } = props;
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -49,9 +58,10 @@ export const CheckboxReactHookFormMultiple: React.FC<IProps> = (props) => {
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("submmitted with this data",data);
     const overallEval = await getOverallEval(data.items[1],data.items[2]);
-    console.log("overall Eval:",overallEval);
+    if (handleOverallEvals) {
+        handleOverallEvals(overallEval);
+    }
     toast({
       title: "You submitted the following values:",
       description: (

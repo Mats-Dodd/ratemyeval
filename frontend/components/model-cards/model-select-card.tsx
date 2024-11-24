@@ -9,6 +9,13 @@ type SelectModel= {
     label: string,
 }
 
+type OverallScore = {
+    accuracy: number;
+    model: string;
+    stderr: number;
+}
+
+
 interface IProps {
     title: string,
     description?: string,
@@ -17,6 +24,7 @@ interface IProps {
     customClasses: string,
     align: "start" | "end",
     submit: boolean,
+    handleOverallEvals?: (overallEvals: OverallScore[]) => void
 }
 
 export const ModelSelectCard: React.FC<IProps> = (props) => {
@@ -28,6 +36,7 @@ export const ModelSelectCard: React.FC<IProps> = (props) => {
         customClasses,
         align,
         submit,
+        handleOverallEvals,
     } = props;
 
   return (
@@ -43,6 +52,7 @@ export const ModelSelectCard: React.FC<IProps> = (props) => {
                     <CheckboxReactHookFormMultiple
                         items={ content }
                         submit={ submit }
+                        handleOverallEvals={ handleOverallEvals }
                     />
                 }
             </CardContent>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { ModelCard } from "./model-card";
 import { ModelSelectCard } from "./model-select-card";
 import { AddCardDialog } from "./add-card-dialog";
@@ -9,11 +9,29 @@ import { Card } from "../ui/card";
 import { QuestionsAccordions } from "./questions-accordions";
 import { CompareTable } from "./compare-table";
 
+type OverallScore = {
+    accuracy: number;
+    model: string;
+    stderr: number;
+}
+
 export const ModelCards: React.FC = () => {
 
     const [ isBrowseCardOpen, toggleBrowseCardOpen ] = useReducer(prev => !prev, false);
-
+    const [ overallEvals, setOverallEvals ] = useState<OverallScore[] | undefined>();
     // const [ isAddCardOpen, toggleAddCardOpen ] = useReducer(prev => !prev, false);
+    const [ selectedModels, setSelectedModels ] = useState<string[]>();
+
+    const handleOverallEvals =  (overallEvals: OverallScore[]) => {
+        setOverallEvals(overallEvals);
+    }
+
+    useEffect(() => {
+        if (overallEvals) {
+            const models = overallEvals.map((evals: OverallScore) => evals.model);
+            setSelectedModels(models);
+        }
+    }, [overallEvals]);
 
     return (
         <>
@@ -40,27 +58,28 @@ export const ModelCards: React.FC = () => {
                         align="start"
                         customClasses={ "rounded-tr-none rounded-br-none border-r-0" }
                         title={"Select Models"}
+                        handleOverallEvals={ handleOverallEvals }
                         content={
                         [
                             {
-                            id: "openai/gpt-4",
-                            label: "GPT 4",
+                                id: "openai/gpt-4",
+                                label: "GPT 4",
                             },
                             {
-                            id: "anthropic/claude-3-5-sonnet-latest",
-                            label: "Claude 3 Sonnet",
+                                id: "anthropic/claude-3-5-sonnet-latest",
+                                label: "Claude 3 Sonnet",
                             },
                             {
-                            id: "google/gemini-1.5-flash-001",
-                            label: "Gemini 1 5 Flash",
+                                id: "google/gemini-1.5-flash-001",
+                                label: "Gemini 1 5 Flash",
                             },
                             {
-                            id: "grok/grok-vision-beta",
-                            label: "Grok Beta",
+                                id: "grok/grok-vision-beta",
+                                label: "Grok Beta",
                             },
                             {
-                            id: "grok_vision_beta",
-                            label: "Grok Vision Beta",
+                                id: "grok_vision_beta",
+                                label: "Grok Vision Beta",
                             },
                         ]
                         }
@@ -83,15 +102,23 @@ export const ModelCards: React.FC = () => {
                 </div>
             }
             </div>
-            <Card className="w-[100%] h-[100%]">
-                <OverallStatsTable />
-            </Card>
-            <Card className="w-[100%] h-[100%] p-4">
-                <QuestionsAccordions />
-            </Card>
-            <Card className="w-[100%] h-[100%] p-4">
-                <CompareTable />
-            </Card>
+            { overallEvals &&
+                <>
+                    <Card className="w-[950px] h-[100%]">
+                        <OverallStatsTable overallEvals={ overallEvals } />
+                    </Card>
+                    <Card className="w-[950px] h-[100%] p-4">
+                        { selectedModels !== undefined &&
+                        <QuestionsAccordions selectedModels={ selectedModels } />
+                        }
+                    </Card>
+                    <Card className="w-[100%] h-[100%] p-4">
+                        { selectedModels !== undefined &&
+                            <CompareTable selectedModels={ selectedModels } />
+                        }
+                    </Card>
+                </>
+            }
             </div>
         </>
   );

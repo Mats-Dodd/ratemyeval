@@ -4,7 +4,6 @@ import React from "react";
 
 export function ApiBridge() {
     const { data: rootText, isLoading: loadingRootText, isError: rootTextError } = useRoot();
-    console.log("rootText:",rootText);
     if (loadingRootText){
         return <>Loading...</>
     }
