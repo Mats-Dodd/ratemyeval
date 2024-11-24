@@ -94,7 +94,9 @@ async def overall_eval(model1: str, model2: str):
             {
                 "model": row.model,
                 "accuracy": round(row.accuracy, 2),
-                "stderr": round(row.stderr, 2)
+                "stderr": round(row.stderr, 2),
+                "upper_bound": round(row.accuracy + (1.96 * row.stderr), 2),
+                "lower_bound": round(row.accuracy - (1.96 * row.stderr), 2),
             }
             for row in results
         ]
@@ -270,7 +272,7 @@ async def compare_smart(model1: str, model2: str):
             'is_significant_at_90_confidence': bool(is_significant_at_90_confidence), 
             'is_significant_at_95_confidence': bool(is_significant_at_95_confidence), 
             'is_significant_at_99_confidence': bool(is_significant_at_99_confidence), 
-            'is_significant_at_99_9_confidence': bool(is_significant_at_99_9_confidence)}        
+            'is_significant_at_99_9_confidence': bool(is_significant_at_99_9_confidence)} 
 
 # Upload dataset
 def csv_to_json(file_content: bytes) -> List[dict]:
@@ -393,3 +395,5 @@ async def read_benchmark(run_id: str):
         }
     }
     """
+
+ 
