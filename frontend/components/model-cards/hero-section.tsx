@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button";
-import { ChevronRightIcon } from "lucide-react";
 import React from "react";
 
 export default function HeroSectionSimpleCentred() {

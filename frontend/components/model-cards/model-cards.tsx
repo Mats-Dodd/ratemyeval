@@ -13,6 +13,8 @@ type OverallScore = {
     accuracy: number;
     model: string;
     stderr: number;
+    upper_bound: number;
+    lower_bound: number;
 }
 
 export const ModelCards: React.FC = () => {

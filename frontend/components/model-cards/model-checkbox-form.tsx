@@ -28,6 +28,8 @@ type OverallScore = {
     accuracy: number;
     model: string;
     stderr: number;
+    upper_bound: number;
+    lower_bound: number;
 }
 
 const FormSchema = z.object({

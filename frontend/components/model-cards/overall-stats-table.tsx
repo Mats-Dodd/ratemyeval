@@ -15,6 +15,8 @@ type OverallScore = {
     accuracy: number;
     model: string;
     stderr: number;
+    upper_bound: number;
+    lower_bound: number;
 }
 
   interface IProps {
@@ -35,7 +37,10 @@ type OverallScore = {
             <TableRow>
             <TableHead>Model</TableHead>
             <TableHead>Accuracy</TableHead>
-            <TableHead className="text-right">Std Dev</TableHead>
+            <TableHead>Std Dev</TableHead>
+            <TableHead>Lower Bound</TableHead>
+            <TableHead>Upper Bound</TableHead>
+
             </TableRow>
         </TableHeader>
         <TableBody>
@@ -43,7 +48,10 @@ type OverallScore = {
                 <TableRow key={ evals.model }>
                     <TableCell className="font-medium">{ evals.model }</TableCell>
                     <TableCell>{ evals.accuracy }</TableCell>
-                    <TableCell className="text-right">{ evals.stderr }</TableCell>
+                    <TableCell>{ evals.stderr }</TableCell>
+                    <TableCell>{ evals.lower_bound }</TableCell>
+                    <TableCell>{ evals.upper_bound }</TableCell>
+
                 </TableRow>
             ))}
         </TableBody>
